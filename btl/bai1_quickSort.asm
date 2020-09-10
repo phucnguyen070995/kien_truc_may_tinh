@@ -1,14 +1,27 @@
 .data
-	elems: .word 10,7,8,7,5,5,4,7,2,1
-	nums: .word 10
+	elems: .word 10,7,8,7,5,5,4,7,2,1,3,9,6,11,15
+	nums: .word 15
+	str0: .asciiz "Day so ban dau la:\n"
+	str1: .asciiz "\nNhap so can tim kiem: "
+	str2: .asciiz "\nDay so sau khi sap xep giam dan theo giai thuat quick sort:\n"
 	str3: .asciiz "-"
 .text 
 main:
 	la $s0, elems
 	lw $s1, nums
+	#day ban dau
+	li $v0, 4
+	la $a0, str0
+	syscall
+	li $s3, 0
+	jal printArr
 	li $a0, 0
 	subi $a1, $s1, 1
 	jal quickSort
+	#day sau khi sap xep
+	li $v0, 4
+	la $a0, str2
+	syscall
 	li $s3, 0
 	jal printArr
 	j exit
@@ -35,7 +48,7 @@ while_1:
 	sll $t0, $a0, 2
 	add $t0, $t0, $s0
 	lw $t2, ($t0)
-	slt $t0, $t2, $s2
+	slt $t0, $s2, $t2
 	beq $t0, $zero, exit_while_1
 	addi $a0, $a0, 1
 	j while_1
@@ -45,7 +58,7 @@ while_2:
 	sll $t0, $a1, 2
 	add $t0, $t0, $s0
 	lw $t2, ($t0)
-	slt $t0, $s2, $t2
+	slt $t0, $t2, $s2
 	beq $t0, $zero, exit_while_2
 	subi $a1, $a1, 1
 	j while_2
