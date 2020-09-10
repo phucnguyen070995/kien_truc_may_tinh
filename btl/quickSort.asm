@@ -1,6 +1,7 @@
 .data
-	elems: .word 1,2,3,4,5,6,7,8,9,10
+	elems: .word 10,7,8,7,5,5,4,7,2,1
 	nums: .word 10
+	str3: .asciiz "-"
 .text 
 main:
 	la $s0, elems
@@ -8,6 +9,8 @@ main:
 	li $a0, 0
 	subi $a1, $s1, 1
 	jal quickSort
+	li $s3, 0
+	jal printArr
 	j exit
 	
 #procedure quickSort		
@@ -17,13 +20,13 @@ quickSort:
 	sw $a0, 4($sp)
 	sw $a1, 0($sp)
 	slt $t0, $a0, $a1
-	beq $t0, $zero, L1
+	bne $t0, $zero, L1
 	addi $sp, $sp, 12
 	jr $ra
 L1:
 	sll $t0, $a0, 2
 	add $t0, $t0, $s0 	#chon pivot la phan tu dau tien
-	lw $t1, ($t0) 		#$t1 chua phan tu pivot
+	lw $s2, ($t0) 		#$t1 chua phan tu pivot
 while_0:
 	#while_do
 	#so sanh elems[i] < pivot
@@ -32,7 +35,7 @@ while_1:
 	sll $t0, $a0, 2
 	add $t0, $t0, $s0
 	lw $t2, ($t0)
-	slt $t0, $t2, $t1
+	slt $t0, $t2, $s2
 	beq $t0, $zero, exit_while_1
 	addi $a0, $a0, 1
 	j while_1
@@ -42,7 +45,7 @@ while_2:
 	sll $t0, $a1, 2
 	add $t0, $t0, $s0
 	lw $t2, ($t0)
-	slt $t0, $t1, $t2
+	slt $t0, $s2, $t2
 	beq $t0, $zero, exit_while_2
 	subi $a1, $a1, 1
 	j while_2
@@ -50,33 +53,39 @@ exit_while_2:
 	slt $t0, $a1, $a0
 	bne $t0, $zero, exit_if
 	jal swap		#co the sinh loi, chu y
+	addi $a0, $a0, 1
+	addi $a1, $a1, -1
 exit_if:
 	#while_do
 	slt $t0, $a0, $a1
 	bne $t0, $zero, while_0
+	
+	#luu a0 moi vao sp
+	addi $sp, $sp, -4
+	sw $a0, 0($sp)
 	#goi de quy
-	#bien tam $t5m luu gia tri a0
-	lw $a0, 4($sp)
+	lw $a0, 8($sp) #a1 oke
 	jal quickSort
-	lw $a1, 0($sp)
+	lw $a0, 0($sp)
+	lw $a1, 4($sp)
 	jal quickSort
-	lw $ra, 8($sp)
-	addi $sp, $sp, 12
+	lw $ra, 12($sp)
+	addi $sp, $sp, 16
 	jr $ra			
 
 #procedure printArr	
 printArr:
 	#tinh index
-	sll $t0, $s1, 2
+	sll $t0, $s3, 2
 	add $t0, $t0, $s0
 	#in gia tri
 	lw $a0, ($t0)
 	li $v0, 1
 	syscall
 	#tang i
-	addi $s1, $s1, 1
+	addi $s3, $s3, 1
 	#kiem tra bien i da la phan tu cuoi hay chua
-	beq $s1, 10, exitPrintArr
+	beq $s3, $s1, exitPrintArr
 	li $v0, 4
 	la $a0, str3
 	syscall
