@@ -1,10 +1,10 @@
 .data
-	elems: .word 10,7,8,7,5,5,4,7,2,1,3,9,6,11,15
-	nums: .word 15
+	elems: .word 0,1,-1,3,4,5,6,7,8,9,-2
+	nums: .word 11
 	str0: .asciiz "Day so ban dau la:\n"
 	str1: .asciiz "\nNhap so can tim kiem: "
 	str2: .asciiz "\nDay so sau khi sap xep giam dan theo giai thuat quick sort:\n"
-	str3: .asciiz "-"
+	str3: .asciiz "***"
 .text 
 main:
 	la $s0, elems
